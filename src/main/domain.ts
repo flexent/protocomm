@@ -1,11 +1,10 @@
-import { ObjectPropsDef, Schema } from 'airtight';
+import { ObjectPropsDef } from 'airtight';
 import { Event } from 'typesafe-event';
 
 export type DomainDef<S> = {
     name: string;
     methods: DomainMethods<S>;
     events: DomainEvents<S>;
-    types?: Schema<unknown>[];
 };
 
 export type DomainMethod<Params, Returns> = (params: Params) => Promise<Returns>;

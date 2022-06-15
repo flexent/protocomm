@@ -9,7 +9,7 @@ import { RpcEvent, RpcMethodRequest, RpcMethodResponse } from './rpc-messages.js
 export class RpcHandler<P> {
 
     constructor(
-        readonly protocol: ProtocolIndex<P>,
+        readonly protocolIndex: ProtocolIndex<P>,
         readonly protocolImpl: P,
         readonly sendResponse: (res: RpcMethodResponse) => void,
         readonly sendEvent: (evt: RpcEvent) => void,
@@ -20,7 +20,8 @@ export class RpcHandler<P> {
     async processMessage(msg: unknown) {
         let id = -1;
         try {
-            const req = RpcMethodRequest.decode(msg);
+            const json = typeof msg === 'object' ? msg : JSON.parse(String(msg));
+            const req = RpcMethodRequest.decode(json);
             id = req.id;
             const result = await this.runMethod(req);
             const res: RpcMethodResponse = {
@@ -45,7 +46,7 @@ export class RpcHandler<P> {
         const {
             reqSchema,
             resSchema,
-        } = this.protocol.lookupMethod(domain, method);
+        } = this.protocolIndex.lookupMethod(domain, method);
         const domainImpl = (this.protocolImpl as any)[domain];
         const methodImpl = domainImpl?.[method];
         if (!methodImpl) {
@@ -57,7 +58,7 @@ export class RpcHandler<P> {
     }
 
     protected registerEvents() {
-        for (const [domainName, domainDef] of this.protocol) {
+        for (const [domainName, domainDef] of this.protocolIndex) {
             for (const [eventName] of Object.entries(domainDef.events)) {
                 const ev = (this.protocolImpl as any)[domainName][eventName];
                 if (ev instanceof Event) {

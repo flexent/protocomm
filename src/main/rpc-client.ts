@@ -32,8 +32,8 @@ export class RpcClient<P> {
     /**
      * Call this on new message.
      */
-    handleMessage(msg: unknown) {
-        const json = JSON.parse(String(msg));
+    processMessage(msg: unknown) {
+        const json = typeof msg === 'object' ? msg : JSON.parse(String(msg));
         if (this.isMethodResponse(json)) {
             return this.handleMethodResponse(json);
         }
