@@ -22,6 +22,9 @@
         "version": "run-s compile",
         "postversion": "npm publish --access=public && git push --tags origin main"
     },
+    "engines": {
+        "node": ">=18"
+    },
     "pre-commit": [
         "lint"
     ],
