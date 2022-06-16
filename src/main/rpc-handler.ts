@@ -21,7 +21,7 @@ export class RpcHandler<P> {
         let id = -1;
         try {
             const json = typeof msg === 'object' ? msg : JSON.parse(String(msg));
-            const req = RpcMethodRequest.decode(json);
+            const req = RpcMethodRequest.decode(json, { strictRequired: true });
             id = req.id;
             const result = await this.runMethod(req);
             const res: RpcMethodResponse = {
@@ -52,20 +52,21 @@ export class RpcHandler<P> {
         if (!methodImpl) {
             throw new MethodNotFound(key);
         }
-        const decodedParams = reqSchema.decode(params);
+        const decodedParams = reqSchema.decode(params, { strictRequired: true });
         const res = await methodImpl.call(domainImpl, decodedParams);
-        return resSchema.decode(res);
+        return resSchema.decode(res, { strictRequired: true });
     }
 
     protected registerEvents() {
         for (const [domainName, domainDef] of this.protocolIndex) {
             for (const [eventName] of Object.entries(domainDef.events)) {
+                const { paramSchema } = this.protocolIndex.lookupEvent(domainName, eventName);
                 const ev = (this.protocolImpl as any)[domainName][eventName];
                 if (ev instanceof Event) {
                     ev.on(params => this.sendEvent({
                         domain: domainName,
                         event: eventName,
-                        params,
+                        params: paramSchema.decode(params),
                     }));
                 }
             }
