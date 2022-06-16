@@ -30,7 +30,7 @@
     ],
     "author": "UBIO",
     "dependencies": {
-        "airtight": "^4.1.1",
+        "airtight": "^4.2.0",
         "typesafe-event": "^2.0.1",
         "typesafe-exception": "^2.0.4"
     },
