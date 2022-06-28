@@ -47,8 +47,8 @@ function createMethod<R, P>(
         const payload = JSON.stringify(params || {});
         const url = new URL(`${domainName}/${methodName}`, config.baseUrl);
         if (method === 'GET') {
-            for (const [k, v] of Object.entries(payload)) {
-                url.searchParams.append(k, v);
+            for (const [k, v] of Object.entries(params ?? {})) {
+                url.searchParams.append(k, v as any);
             }
         }
         const headers = {
