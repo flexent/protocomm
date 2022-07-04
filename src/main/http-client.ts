@@ -44,7 +44,6 @@ function createMethod<R, P>(
     const method = methodDef.type === 'query' ? 'GET' : 'POST';
     const fetch = config.fetch ?? globalThis.fetch;
     return async (params: P): Promise<R> => {
-        const payload = JSON.stringify(params || {});
         const url = new URL(`${domainName}/${methodName}`, config.baseUrl);
         if (method === 'GET') {
             for (const [k, v] of Object.entries(params ?? {})) {
@@ -60,7 +59,7 @@ function createMethod<R, P>(
             headers,
             mode: 'cors',
             credentials: 'include',
-            body: method === 'POST' ? payload : undefined,
+            body: method === 'POST' ? JSON.stringify(params ?? {}) : undefined,
         });
         const json = await res.json().catch(() => ({}));
         if (!res.ok) {
