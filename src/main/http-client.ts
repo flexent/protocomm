@@ -47,6 +47,9 @@ function createMethod<R, P>(
         const url = new URL(`${domainName}/${methodName}`, config.baseUrl);
         if (method === 'GET') {
             for (const [k, v] of Object.entries(params ?? {})) {
+                if (v === undefined) {
+                    continue;
+                }
                 url.searchParams.append(k, v as any);
             }
         }
