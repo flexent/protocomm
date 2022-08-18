@@ -50,7 +50,10 @@ function createMethod<R, P>(
                 if (v === undefined) {
                     continue;
                 }
-                url.searchParams.append(k, v as any);
+                const arr = Array.isArray(v) ? v : [v];
+                for (const v of arr) {
+                    url.searchParams.append(k, v);
+                }
             }
         }
         const headers = {
