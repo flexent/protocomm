@@ -1,4 +1,4 @@
-import { Event } from 'typesafe-event';
+import { Event } from '@flexent/event';
 
 import { DomainDef } from '../../main/domain.js';
 import { GroupSummary, GroupSummarySchema } from '../schema/group-summary.js';

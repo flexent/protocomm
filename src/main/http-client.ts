@@ -1,4 +1,4 @@
-import { Exception } from 'typesafe-exception';
+import { Exception } from '@flexent/exception';
 
 import { DomainMethodDef } from './domain.js';
 import { ProtocolIndex } from './protocol.js';

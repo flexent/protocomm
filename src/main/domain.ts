@@ -1,5 +1,5 @@
+import { Event } from '@flexent/event';
 import { ObjectPropsDef } from 'airtight';
-import { Event } from 'typesafe-event';
 
 export type DomainDef<S> = {
     name: string;

@@ -1,5 +1,5 @@
 {
-    "name": "@nodescript/protocomm",
+    "name": "@flexent/protocomm",
     "version": "0.2.0",
     "type": "module",
     "description": "Bi-directional transport-agnostic JSON-based messaging",
@@ -29,9 +29,9 @@
         "lint"
     ],
     "dependencies": {
-        "airtight": "^4.2.0",
-        "typesafe-event": "^2.0.1",
-        "typesafe-exception": "^2.0.4"
+        "@flexent/event": "^2.0.5",
+        "@flexent/exception": "^2.0.6",
+        "airtight": "^4.2.0"
     },
     "devDependencies": {
         "@types/mocha": "^9.1.1",
@@ -44,12 +44,12 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/NodeScriptLang/protocomm.git"
+        "url": "git+https://github.com/flexent/protocomm.git"
     },
     "keywords": [
         "protocol"
     ],
     "author": "UBIO",
     "license": "ISC",
-    "homepage": "https://github.com/NodeScriptLang/protocomm#readme"
+    "homepage": "https://github.com/flexent/protocomm#readme"
 }

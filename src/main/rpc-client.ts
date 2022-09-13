@@ -1,5 +1,5 @@
-import { Event } from 'typesafe-event';
-import { Exception } from 'typesafe-exception';
+import { Event } from '@flexent/event';
+import { Exception } from '@flexent/exception';
 
 import { DomainMethod } from './domain.js';
 import { ProtocolIndex } from './protocol.js';

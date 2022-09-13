@@ -1,5 +1,5 @@
+import { Exception } from '@flexent/exception';
 import { Schema } from 'airtight';
-import { Exception } from 'typesafe-exception';
 
 import { DomainDef, DomainEventDef, DomainMethodDef } from './domain.js';
 

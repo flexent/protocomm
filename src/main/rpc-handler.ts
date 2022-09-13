@@ -1,4 +1,4 @@
-import { Event } from 'typesafe-event';
+import { Event } from '@flexent/event';
 
 import { MethodNotFound, ProtocolIndex } from './protocol.js';
 import { RpcEvent, RpcMethodRequest, RpcMethodResponse } from './rpc-messages.js';

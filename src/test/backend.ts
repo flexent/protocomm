@@ -1,4 +1,4 @@
-import { Event } from 'typesafe-event';
+import { Event } from '@flexent/event';
 
 import { Protocol } from './protocol.js';
 import { GroupSummary } from './schema/group-summary.js';
