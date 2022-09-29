@@ -31,7 +31,7 @@
     "dependencies": {
         "@flexent/event": "^2.0.5",
         "@flexent/exception": "^2.0.6",
-        "@flexent/schema": "^5.0.0"
+        "@flexent/schema": "^5.1.0"
     },
     "devDependencies": {
         "@flexent/eslint-config": "^1.0.0",
