@@ -42,7 +42,6 @@ export class RpcHandler<P> {
 
     protected async runMethod(rpcReq: RpcMethodRequest): Promise<unknown> {
         const { domain, method, params } = rpcReq;
-        const key = `${domain}.${method}`;
         const {
             reqSchema,
             resSchema,
@@ -50,11 +49,11 @@ export class RpcHandler<P> {
         const domainImpl = (this.protocolImpl as any)[domain];
         const methodImpl = domainImpl?.[method];
         if (!methodImpl) {
-            throw new MethodNotFound(key);
+            throw new MethodNotFound(`${domain}.${method}`);
         }
         const decodedParams = reqSchema.decode(params, { strictRequired: true });
         const res = await methodImpl.call(domainImpl, decodedParams);
-        return resSchema.decode(res, { strictRequired: true });
+        return resSchema.decode(res);
     }
 
     protected registerEvents() {
