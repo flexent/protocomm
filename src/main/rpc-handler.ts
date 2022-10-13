@@ -1,6 +1,4 @@
-import { Event } from '@flexent/event';
 import { ChannelEvent } from './channel-event.js';
-
 import { MethodNotFound, ProtocolIndex } from './protocol.js';
 import { RpcEvent, RpcMethodRequest, RpcMethodResponse } from './rpc-messages.js';
 
@@ -67,7 +65,7 @@ export class RpcHandler<P> {
                         domain: domainName,
                         event: eventName,
                         channel: payload.channel,
-                        params: paramSchema.decode(payload.data),
+                        data: paramSchema.decode(payload.data),
                     }));
                 }
             }

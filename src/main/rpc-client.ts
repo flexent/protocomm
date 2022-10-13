@@ -19,7 +19,7 @@ export interface RpcClientTransport {
 export class RpcClient<P> {
     protected id = 0;
     protected awaitingCommands: Map<number, AwaitingCommand<any>> = new Map();
-    protected eventMap: Map<string, Event<any>> = new Map();
+    protected eventMap: Map<string, ChannelEvent<any>> = new Map();
 
     client: P;
 
@@ -107,7 +107,10 @@ export class RpcClient<P> {
         if (!event) {
             return;
         }
-        event.emit(res.params);
+        event.emit({
+            channel: res.channel,
+            data: res.data,
+        });
     }
 
     protected isMethodResponse(msg: unknown): msg is RpcMethodResponse {

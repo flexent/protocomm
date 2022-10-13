@@ -52,7 +52,7 @@ export interface RpcEvent {
     domain: string;
     event: string;
     channel: string;
-    params: any;
+    data: any;
 }
 
 export const RpcEvent = new Schema<RpcEvent>({
@@ -62,6 +62,6 @@ export const RpcEvent = new Schema<RpcEvent>({
         domain: { type: 'string' },
         channel: { type: 'string' },
         event: { type: 'string' },
-        params: { type: 'any' },
+        data: { type: 'any' },
     },
 });
