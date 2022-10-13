@@ -29,7 +29,7 @@
         "lint"
     ],
     "dependencies": {
-        "@flexent/event": "^2.0.5",
+        "@flexent/event": "^2.1.0",
         "@flexent/exception": "^2.0.6",
         "@flexent/schema": "^5.1.0"
     },
