@@ -1,6 +1,7 @@
 import { Event } from '@flexent/event';
 import { Exception } from '@flexent/exception';
 
+import { ChannelEvent } from './channel-event.js';
 import { DomainMethod } from './domain.js';
 import { ProtocolIndex } from './protocol.js';
 import { RpcEvent, RpcMethodRequest, RpcMethodResponse } from './rpc-messages.js';
@@ -77,7 +78,7 @@ export class RpcClient<P> {
     }
 
     protected createEvent(domainName: string, eventName: string) {
-        const evt = new Event<any>();
+        const evt = new ChannelEvent<any>();
         this.eventMap.set(`${domainName}.${eventName}`, evt);
         return evt;
     }
