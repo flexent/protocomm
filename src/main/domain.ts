@@ -1,6 +1,11 @@
 import { Event } from '@flexent/event';
 import { ObjectPropsDef } from '@flexent/schema';
 
+export interface EventPayload<T> {
+    channel: string;
+    payload: T;
+}
+
 export type DomainDef<S> = {
     name: string;
     methods: DomainMethods<S>;
@@ -10,7 +15,7 @@ export type DomainDef<S> = {
 export type DomainMethod<Params, Returns> = (params: Params) => Promise<Returns>;
 
 type IsMethod<S, K extends keyof S> = S[K] extends DomainMethod<any, any> ? K : never;
-type IsEvent<S, K extends keyof S> = S[K] extends Event<any> ? K : never;
+type IsEvent<S, K extends keyof S> = S[K] extends Event<EventPayload<any>> ? K : never;
 
 export type DomainMethods<S> = {
     [K in keyof S as IsMethod<S, K>]: S[K] extends DomainMethod<infer P, infer R>
@@ -19,7 +24,7 @@ export type DomainMethods<S> = {
 };
 
 export type DomainEvents<S> = {
-    [K in keyof S as IsEvent<S, K>]: S[K] extends Event<infer E> ? DomainEventDef<E> : never;
+    [K in keyof S as IsEvent<S, K>]: S[K] extends Event<EventPayload<infer E>> ? DomainEventDef<E> : never;
 };
 
 export type DomainMethodDef<P = any, R = any> = {

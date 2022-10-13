@@ -62,10 +62,11 @@ export class RpcHandler<P> {
                 const { paramSchema } = this.protocolIndex.lookupEvent(domainName, eventName);
                 const ev = (this.protocolImpl as any)[domainName][eventName];
                 if (ev instanceof Event) {
-                    ev.on(params => this.sendEvent({
+                    ev.on(payload => this.sendEvent({
                         domain: domainName,
                         event: eventName,
-                        params: paramSchema.decode(params),
+                        channel: payload.channel,
+                        params: paramSchema.decode(payload.data),
                     }));
                 }
             }
