@@ -1,6 +1,6 @@
 {
     "name": "@nodescript/protocomm",
-    "version": "0.5.1",
+    "version": "0.5.2",
     "type": "module",
     "description": "Bi-directional transport-agnostic JSON-based messaging",
     "exports": {
