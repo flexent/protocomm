@@ -1,5 +1,5 @@
-import { Exception } from '@flexent/exception';
-import { Schema } from '@flexent/schema';
+import { Exception } from '@nodescript/exception';
+import { Schema } from '@nodescript/schema';
 
 import { DomainDef, DomainEventDef, DomainMethodDef } from './domain.js';
 

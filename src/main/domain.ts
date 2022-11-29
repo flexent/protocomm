@@ -1,4 +1,4 @@
-import { ObjectPropsDef } from '@flexent/schema';
+import { ObjectPropsDef } from '@nodescript/schema';
 
 import { ChannelEvent } from './channel-event.js';
 

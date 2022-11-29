@@ -1,5 +1,5 @@
-import { Event } from '@flexent/event';
-import { Exception } from '@flexent/exception';
+import { Event } from '@nodescript/event';
+import { Exception } from '@nodescript/exception';
 
 import { ChannelEvent } from './channel-event.js';
 import { DomainMethod } from './domain.js';

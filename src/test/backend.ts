@@ -1,4 +1,4 @@
-import { Event } from '@flexent/event';
+import { Event } from '@nodescript/event';
 
 import { Protocol } from './protocol.js';
 import { GroupSummary } from './schema/group-summary.js';
