@@ -29,9 +29,9 @@
         "lint"
     ],
     "dependencies": {
-        "@nodescript/event": "^2.1.0",
-        "@nodescript/exception": "^2.0.6",
-        "@nodescript/schema": "^5.2.0"
+        "@nodescript/event": "^2.1.1",
+        "@nodescript/exception": "^2.0.8",
+        "@nodescript/schema": "^5.2.1"
     },
     "devDependencies": {
         "@nodescript/eslint-config": "^1.0.0",
