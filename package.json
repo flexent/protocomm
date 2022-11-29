@@ -31,7 +31,7 @@
     "dependencies": {
         "@nodescript/event": "^2.1.1",
         "@nodescript/exception": "^2.0.8",
-        "@nodescript/schema": "^5.2.1"
+        "@nodescript/schema": "^5.2.2"
     },
     "devDependencies": {
         "@nodescript/eslint-config": "^1.0.0",
