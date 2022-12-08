@@ -39,3 +39,9 @@ export type DomainEventDef<E> = {
 };
 
 export type MethodType = 'query' | 'command';
+
+export interface DomainMethodStat {
+    domain: string;
+    method: string;
+    latency: number;
+}

@@ -1,4 +1,7 @@
+import { Event } from '@nodescript/event';
+
 import { ChannelEvent } from './channel-event.js';
+import { DomainMethodStat } from './domain.js';
 import { MethodNotFound, ProtocolIndex } from './protocol.js';
 import { RpcEvent, RpcMethodRequest, RpcMethodResponse } from './rpc-messages.js';
 
@@ -6,6 +9,8 @@ import { RpcEvent, RpcMethodRequest, RpcMethodResponse } from './rpc-messages.js
  * PoC RPC message handler. Can be used to implement server side of RPC communication.
  */
 export class RpcHandler<P> {
+
+    methodStats = new Event<DomainMethodStat>();
 
     constructor(
         readonly protocolIndex: ProtocolIndex<P>,
@@ -40,19 +45,29 @@ export class RpcHandler<P> {
     }
 
     protected async runMethod(rpcReq: RpcMethodRequest): Promise<unknown> {
-        const { domain, method, params } = rpcReq;
-        const {
-            reqSchema,
-            resSchema,
-        } = this.protocolIndex.lookupMethod(domain, method);
-        const domainImpl = (this.protocolImpl as any)[domain];
-        const methodImpl = domainImpl?.[method];
-        if (!methodImpl) {
-            throw new MethodNotFound(`${domain}.${method}`);
+        const startedAt = Date.now();
+        try {
+
+            const { domain, method, params } = rpcReq;
+            const {
+                reqSchema,
+                resSchema,
+            } = this.protocolIndex.lookupMethod(domain, method);
+            const domainImpl = (this.protocolImpl as any)[domain];
+            const methodImpl = domainImpl?.[method];
+            if (!methodImpl) {
+                throw new MethodNotFound(`${domain}.${method}`);
+            }
+            const decodedParams = reqSchema.decode(params, { strictRequired: true });
+            const res = await methodImpl.call(domainImpl, decodedParams);
+            return resSchema.decode(res);
+        } finally {
+            this.methodStats.emit({
+                domain: rpcReq.domain,
+                method: rpcReq.method,
+                latency: Date.now() - startedAt,
+            });
         }
-        const decodedParams = reqSchema.decode(params, { strictRequired: true });
-        const res = await methodImpl.call(domainImpl, decodedParams);
-        return resSchema.decode(res);
     }
 
     protected registerEvents() {
