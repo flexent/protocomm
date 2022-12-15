@@ -1,5 +1,3 @@
-import { Exception } from '@nodescript/exception';
-
 import { DomainMethodDef } from './domain.js';
 import { ProtocolIndex } from './protocol.js';
 
@@ -69,9 +67,10 @@ function createMethod<R, P>(
         });
         const json = await res.json().catch(() => ({}));
         if (!res.ok) {
-            const err = new Exception(json.message ?? 'The request cannot be processed.');
-            err.name = json.name ?? 'UnknownError';
-            throw err;
+            const error = new Error(json?.message ?? 'Unknown error') as any;
+            error.name = json.name ?? 'UnknownError';
+            error.details = json.details;
+            throw error;
         }
         return json;
     };

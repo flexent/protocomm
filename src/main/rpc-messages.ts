@@ -3,6 +3,7 @@ import { Schema } from '@nodescript/schema';
 export interface RpcError {
     name: string;
     message: string;
+    details: any;
 }
 
 export const RpcError = new Schema<RpcError>({
@@ -11,6 +12,7 @@ export const RpcError = new Schema<RpcError>({
     properties: {
         name: { type: 'string' },
         message: { type: 'string' },
+        details: { type: 'any' },
     },
 });
 

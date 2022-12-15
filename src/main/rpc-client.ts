@@ -1,5 +1,4 @@
 import { Event } from '@nodescript/event';
-import { Exception } from '@nodescript/exception';
 
 import { ChannelEvent } from './channel-event.js';
 import { DomainMethod } from './domain.js';
@@ -48,9 +47,7 @@ export class RpcClient<P> {
      */
     handleClose() {
         for (const cmd of this.awaitingCommands.values()) {
-            const err = new ClientClosed(
-                `Method ${cmd.methodName} failed: client connection closed`
-            );
+            const err = new ClientClosed(`Method ${cmd.methodName} failed: client connection closed`);
             cmd.reject(err);
         }
         this.awaitingCommands.clear();
@@ -91,12 +88,10 @@ export class RpcClient<P> {
         this.awaitingCommands.delete(res.id);
         const { resolve, reject } = cmd;
         if (res.error) {
-            reject(
-                Exception.fromJSON({
-                    name: res.error?.name ?? 'UnknownError',
-                    message: res.error?.message ?? 'Unknown error',
-                })
-            );
+            const error = new Error(res.error?.message ?? 'Unknown error') as any;
+            error.name = res.error?.name ?? 'UnknownError';
+            error.details = res.error?.details;
+            reject(error);
         } else {
             resolve(res.result);
         }
@@ -144,4 +139,6 @@ interface AwaitingCommand<T> {
     reject: (error: Error) => void;
 }
 
-export class ClientClosed extends Exception {}
+export class ClientClosed extends Error {
+    override name = this.constructor.name;
+}

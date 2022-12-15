@@ -1,4 +1,3 @@
-import { Exception } from '@nodescript/exception';
 import { Schema } from '@nodescript/schema';
 
 import { DomainDef, DomainEventDef, DomainMethodDef } from './domain.js';
@@ -102,7 +101,8 @@ export class ProtocolIndex<P> {
 
 }
 
-export class MethodNotFound extends Exception {
+export class MethodNotFound extends Error {
+    override name = this.constructor.name;
     status = 404;
 
     constructor(key: string) {
@@ -110,7 +110,8 @@ export class MethodNotFound extends Exception {
     }
 }
 
-export class EventNotFound extends Exception {
+export class EventNotFound extends Error {
+    override name = this.constructor.name;
     status = 404;
 
     constructor(key: string) {

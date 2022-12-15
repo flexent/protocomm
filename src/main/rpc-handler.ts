@@ -39,6 +39,7 @@ export class RpcHandler<P> {
                 error: {
                     name: error.name,
                     message: error.message,
+                    details: error.details,
                 },
             });
         }
