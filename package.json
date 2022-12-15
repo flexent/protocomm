@@ -29,8 +29,8 @@
         "lint"
     ],
     "dependencies": {
-        "@nodescript/event": "^2.1.1",
-        "@nodescript/schema": "^5.2.2"
+        "airtight": "^5.2.3",
+        "nanoevent": "^1.0.0"
     },
     "devDependencies": {
         "@nodescript/eslint-config": "^1.0.0",

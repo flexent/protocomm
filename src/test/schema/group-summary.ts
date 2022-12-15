@@ -1,4 +1,4 @@
-import { Schema } from '@nodescript/schema';
+import { Schema } from 'airtight';
 
 export interface GroupSummary {
     group: string;

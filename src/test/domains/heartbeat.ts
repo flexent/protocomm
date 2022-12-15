@@ -1,4 +1,4 @@
-import { Event } from '@nodescript/event';
+import { Event } from 'nanoevent';
 
 import { DomainDef } from '../../main/domain.js';
 import { GroupSummary, GroupSummarySchema } from '../schema/group-summary.js';

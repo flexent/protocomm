@@ -1,4 +1,4 @@
-import { Event } from '@nodescript/event';
+import { Event } from 'nanoevent';
 
 import { ChannelEvent } from './channel-event.js';
 import { DomainMethod } from './domain.js';

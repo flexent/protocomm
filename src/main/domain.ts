@@ -1,4 +1,4 @@
-import { ObjectPropsDef } from '@nodescript/schema';
+import { ObjectPropsDef } from 'airtight';
 
 import { ChannelEvent } from './channel-event.js';
 

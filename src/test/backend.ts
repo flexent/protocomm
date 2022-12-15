@@ -1,4 +1,4 @@
-import { Event } from '@nodescript/event';
+import { Event } from 'nanoevent';
 
 import { Protocol } from './protocol.js';
 import { GroupSummary } from './schema/group-summary.js';
