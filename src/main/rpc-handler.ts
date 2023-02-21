@@ -48,7 +48,6 @@ export class RpcHandler<P> {
     protected async runMethod(rpcReq: RpcMethodRequest): Promise<unknown> {
         const startedAt = Date.now();
         try {
-
             const { domain, method, params } = rpcReq;
             const {
                 reqSchema,
@@ -61,13 +60,21 @@ export class RpcHandler<P> {
             }
             const decodedParams = reqSchema.decode(params, { strictRequired: true });
             const res = await methodImpl.call(domainImpl, decodedParams);
-            return resSchema.decode(res);
-        } finally {
+            const result = resSchema.decode(res);
             this.methodStats.emit({
                 domain: rpcReq.domain,
                 method: rpcReq.method,
                 latency: Date.now() - startedAt,
             });
+            return result;
+        } catch (error: any) {
+            this.methodStats.emit({
+                domain: rpcReq.domain,
+                method: rpcReq.method,
+                latency: Date.now() - startedAt,
+                error: error.name
+            });
+            throw error;
         }
     }
 
