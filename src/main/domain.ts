@@ -44,4 +44,5 @@ export interface DomainMethodStat {
     domain: string;
     method: string;
     latency: number;
+    error?: string;
 }
