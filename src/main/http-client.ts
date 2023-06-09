@@ -42,7 +42,11 @@ function createMethod<R, P>(
     const method = methodDef.type === 'query' ? 'GET' : 'POST';
     const fetch = config.fetch ?? globalThis.fetch;
     return async (params: P): Promise<R> => {
-        const url = new URL(`${domainName}/${methodName}`, config.baseUrl);
+        let baseUrl = config.baseUrl;
+        if (!baseUrl.endsWith('/')) {
+            baseUrl += '/';
+        }
+        const url = new URL(`${domainName}/${methodName}`, baseUrl);
         if (method === 'GET') {
             for (const [k, v] of Object.entries(params ?? {})) {
                 if (v === undefined) {
