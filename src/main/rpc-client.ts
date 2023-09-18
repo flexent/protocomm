@@ -1,6 +1,5 @@
 import { Event } from 'nanoevent';
 
-import { ChannelEvent } from './channel-event.js';
 import { DomainMethod } from './domain.js';
 import { ProtocolIndex } from './protocol.js';
 import { RpcEvent, RpcMethodRequest, RpcMethodResponse } from './rpc-messages.js';
@@ -18,7 +17,7 @@ export interface RpcClientTransport {
 export class RpcClient<P> {
     protected id = 0;
     protected awaitingCommands: Map<number, AwaitingCommand<any>> = new Map();
-    protected eventMap: Map<string, ChannelEvent<any>> = new Map();
+    protected eventMap: Map<string, Event<any>> = new Map();
 
     client: P;
 
@@ -75,7 +74,7 @@ export class RpcClient<P> {
     }
 
     protected createEvent(domainName: string, eventName: string) {
-        const evt = new ChannelEvent<any>();
+        const evt = new Event<any>();
         this.eventMap.set(`${domainName}.${eventName}`, evt);
         return evt;
     }
@@ -102,10 +101,7 @@ export class RpcClient<P> {
         if (!event) {
             return;
         }
-        event.emit({
-            channel: res.channel,
-            data: res.data,
-        });
+        event.emit(res.data);
     }
 
     protected isMethodResponse(msg: unknown): msg is RpcMethodResponse {

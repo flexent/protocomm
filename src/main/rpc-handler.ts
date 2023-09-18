@@ -1,6 +1,5 @@
 import { Event } from 'nanoevent';
 
-import { ChannelEvent } from './channel-event.js';
 import { DomainMethodStat } from './domain.js';
 import { MethodNotFound, ProtocolIndex } from './protocol.js';
 import { RpcEvent, RpcMethodRequest, RpcMethodResponse } from './rpc-messages.js';
@@ -83,12 +82,11 @@ export class RpcHandler<P> {
             for (const [eventName] of Object.entries(domainDef.events)) {
                 const { paramSchema } = this.protocolIndex.lookupEvent(domainName, eventName);
                 const ev = (this.protocolImpl as any)[domainName][eventName];
-                if (ev instanceof ChannelEvent) {
+                if (ev instanceof Event) {
                     ev.on(payload => this.sendEvent({
                         domain: domainName,
                         event: eventName,
-                        channel: payload.channel,
-                        data: paramSchema.decode(payload.data),
+                        data: paramSchema.decode(payload),
                     }));
                 }
             }

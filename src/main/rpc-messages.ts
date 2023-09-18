@@ -53,7 +53,6 @@ export const RpcMethodResponse = new Schema<RpcMethodResponse>({
 export interface RpcEvent {
     domain: string;
     event: string;
-    channel: string;
     data: any;
 }
 
@@ -62,7 +61,6 @@ export const RpcEvent = new Schema<RpcEvent>({
     type: 'object',
     properties: {
         domain: { type: 'string' },
-        channel: { type: 'string' },
         event: { type: 'string' },
         data: { type: 'any' },
     },
