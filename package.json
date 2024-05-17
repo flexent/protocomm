@@ -29,7 +29,7 @@
         "lint"
     ],
     "dependencies": {
-        "airtight": "^5.7.1",
+        "airtight": "^5.7.2",
         "nanoevent": "^1.0.0"
     },
     "devDependencies": {
