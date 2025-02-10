@@ -62,20 +62,26 @@ function createMethod<R, P>(
             'content-type': 'application/json',
             ...config.headers,
         };
-        const res = await fetch(url.toString(), {
-            method,
-            headers,
-            mode: 'cors',
-            credentials: 'include',
-            body: method === 'POST' ? JSON.stringify(params ?? {}) : undefined,
-        });
-        const json = await res.json().catch(() => ({}));
-        if (!res.ok) {
-            const error = new Error(json?.message ?? 'Unknown error') as any;
-            error.name = json.name ?? 'UnknownError';
-            error.details = json.details;
+        try {
+            const res = await fetch(url.toString(), {
+                method,
+                headers,
+                mode: 'cors',
+                credentials: 'include',
+                body: method === 'POST' ? JSON.stringify(params ?? {}) : undefined,
+            });
+
+            const json = await res.json().catch(() => ({}));
+            if (!res.ok) {
+                const error = new Error(json?.message ?? 'Unknown error') as any;
+                error.name = json.name ?? 'UnknownError';
+                error.details = json.details;
+                throw error;
+            }
+            return json;
+        } catch (error: any) {
+            error.details = error.details ?? 'The target server failed to process the request.';
             throw error;
         }
-        return json;
     };
 }
