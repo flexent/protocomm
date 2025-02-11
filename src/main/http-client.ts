@@ -1,3 +1,4 @@
+import { parseJson } from '../util/json.js';
 import { DomainMethodDef } from './domain.js';
 import { ProtocolIndex } from './protocol.js';
 
@@ -70,18 +71,36 @@ function createMethod<R, P>(
                 credentials: 'include',
                 body: method === 'POST' ? JSON.stringify(params ?? {}) : undefined,
             });
-
-            const json = await res.json().catch(() => ({}));
+            
             if (!res.ok) {
-                const error = new Error(json?.message ?? 'Unknown error') as any;
+                const responseBodyText = await res.text();
+                const json = parseJson(responseBodyText, {})
+                const message = json.message ?? responseBodyText;
+                const error = new Error(message) as any;
                 error.name = json.name ?? 'UnknownError';
                 error.details = json.details;
+                error.code = res.status;
                 throw error;
             }
-            return json;
+            return await res.json();
         } catch (error: any) {
-            error.details = error.details ?? 'The target server failed to process the request.';
-            throw error;
+            throw new RequestError(error, url.toString());
         }
     };
+}
+
+class RequestError extends Error {
+    cause: any;
+    code?: number;
+
+    constructor(err: any, url: string) {
+        super(`Request to ${url} failed: ${err.message}`);
+        this.name = "RequestError";
+        this.code = err.code ?? undefined;
+        this.cause = {
+            name: err?.name ?? "UnknownError",
+            message: err?.message ?? String(err),
+            details: err?.details ?? "The target server failed to process the request."
+        }
+    }
 }
