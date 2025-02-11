@@ -71,10 +71,10 @@ function createMethod<R, P>(
                 credentials: 'include',
                 body: method === 'POST' ? JSON.stringify(params ?? {}) : undefined,
             });
-            
+
             if (!res.ok) {
                 const responseBodyText = await res.text();
-                const json = parseJson(responseBodyText, {})
+                const json = parseJson(responseBodyText, {});
                 const message = json.message ?? responseBodyText;
                 const error = new Error(message) as any;
                 error.name = json.name ?? 'UnknownError';
@@ -95,12 +95,12 @@ class RequestError extends Error {
 
     constructor(err: any, url: string) {
         super(`Request to ${url} failed: ${err.message}`);
-        this.name = "RequestError";
+        this.name = 'RequestError';
         this.code = err.code ?? undefined;
         this.cause = {
-            name: err?.name ?? "UnknownError",
+            name: err?.name ?? 'UnknownError',
             message: err?.message ?? String(err),
-            details: err?.details ?? "The target server failed to process the request."
-        }
+            details: err?.details ?? 'The target server failed to process the request.'
+        };
     }
 }
