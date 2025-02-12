@@ -1,5 +1,5 @@
 import { DomainMethodDef } from './domain.js';
-import { HttpRequestError, RequestFailedError, UnexpectedResponseError } from './http-errors.js';
+import { HttpRequestError, RequestFailedError, UnexpectedResponseError } from './errors.js';
 import { ProtocolIndex } from './protocol.js';
 
 export interface FetchOptions {
@@ -48,6 +48,7 @@ function createMethod<R, P>(
             baseUrl += '/';
         }
         const url = new URL(`${domainName}/${methodName}`, baseUrl);
+
         if (method === 'GET') {
             for (const [k, v] of Object.entries(params ?? {})) {
                 if (v === undefined) {
@@ -59,6 +60,7 @@ function createMethod<R, P>(
                 }
             }
         }
+
         const headers = {
             'content-type': 'application/json',
             ...config.headers,
@@ -75,21 +77,31 @@ function createMethod<R, P>(
         });
 
         if (!res.ok) {
-            const responseBodyText = await res.text();
-            let responseError;
-            try {
-                const json = JSON.parse(responseBodyText);
-                responseError = new Error(json.message) as any;
-                responseError.name = json.name;
-                responseError.details = json.details;
-            } catch {
-                throw new HttpRequestError(res, responseBodyText);
+            const responseBody = await res.text();
+            const details = parseJson(responseBody) ?? { response: responseBody };
+            // If response is JSON and has { name, message, details? }, then throw that
+            // Otherwise throw a more generic HttpRequestError
+            if (details && typeof details.name === 'string' && typeof details.message === 'string') {
+                const err = new Error() as any;
+                err.message = details.message;
+                err.name = details.name;
+                err.details = details.details;
+                err.status = res.status;
+                throw err;
             }
-            throw responseError;
+            throw new HttpRequestError(res.status, method, url.toString(), details);
         }
 
         return await res.json().catch(err => {
             throw new UnexpectedResponseError(err);
         });
     };
+}
+
+function parseJson(str: string, defaultValue: any = undefined): any {
+    try {
+        return JSON.parse(str);
+    } catch (_err) {
+        return defaultValue;
+    }
 }
