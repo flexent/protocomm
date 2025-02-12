@@ -15,9 +15,10 @@ export interface RpcClientTransport {
  * that supports sending and receiving arbitrary messages (e.g. WebSocket, IPC, events, etc.)
  */
 export class RpcClient<P> {
+
     protected id = 0;
-    protected awaitingCommands: Map<number, AwaitingCommand<any>> = new Map();
-    protected eventMap: Map<string, Event<any>> = new Map();
+    protected awaitingCommands = new Map<number, AwaitingCommand<any>>();
+    protected eventMap = new Map<string, Event<any>>();
 
     client: P;
 
@@ -126,6 +127,7 @@ export class RpcClient<P> {
         }
         return result;
     }
+
 }
 
 interface AwaitingCommand<T> {
@@ -136,5 +138,7 @@ interface AwaitingCommand<T> {
 }
 
 export class ClientClosed extends Error {
+
     override name = this.constructor.name;
+
 }

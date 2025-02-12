@@ -1,11 +1,11 @@
 import { ObjectPropsDef } from 'airtight';
 import { Event } from 'nanoevent';
 
-export type DomainDef<S> = {
+export interface DomainDef<S> {
     name: string;
     methods: DomainMethods<S>;
     events: DomainEvents<S>;
-};
+}
 
 export type DomainMethod<Params, Returns> = (params: Params) => Promise<Returns>;
 
@@ -22,15 +22,15 @@ export type DomainEvents<S> = {
     [K in keyof S as IsEvent<S, K>]: S[K] extends Event<infer E> ? DomainEventDef<E> : never;
 };
 
-export type DomainMethodDef<P = any, R = any> = {
+export interface DomainMethodDef<P = any, R = any> {
     type: MethodType;
     params: ObjectPropsDef<P>;
     returns: ObjectPropsDef<R>;
-};
+}
 
-export type DomainEventDef<E> = {
+export interface DomainEventDef<E> {
     params: ObjectPropsDef<E>;
-};
+}
 
 export type MethodType = 'query' | 'command';
 

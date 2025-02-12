@@ -12,9 +12,7 @@ export interface FetchOptions {
     credentials?: 'include' | 'omit' | 'same-origin';
 }
 
-export interface RequestHeaders {
-    [key: string]: string;
-}
+export type RequestHeaders = Record<string, string>;
 
 export interface HttpClientConfig {
     baseUrl: string;

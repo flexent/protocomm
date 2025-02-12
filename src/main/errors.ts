@@ -11,6 +11,7 @@ export class RequestFailedError extends Error {
         this.details = err.details;
         this.cause = err;
     }
+
 }
 
 export class HttpRequestError extends Error {
@@ -24,6 +25,7 @@ export class HttpRequestError extends Error {
         this.status = status;
         this.details = details;
     }
+
 }
 
 export class UnexpectedResponseError extends Error {
@@ -37,4 +39,5 @@ export class UnexpectedResponseError extends Error {
         this.code = err.code ?? undefined;
         this.details = err.details;
     }
+
 }
