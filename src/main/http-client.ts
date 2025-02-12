@@ -1,5 +1,5 @@
-import { parseJson } from '../util/json.js';
 import { DomainMethodDef } from './domain.js';
+import { HttpRequestError, RequestFailedError, UnexpectedResponseError } from './http-errors.js';
 import { ProtocolIndex } from './protocol.js';
 
 export interface FetchOptions {
@@ -63,44 +63,33 @@ function createMethod<R, P>(
             'content-type': 'application/json',
             ...config.headers,
         };
-        try {
-            const res = await fetch(url.toString(), {
-                method,
-                headers,
-                mode: 'cors',
-                credentials: 'include',
-                body: method === 'POST' ? JSON.stringify(params ?? {}) : undefined,
-            });
 
-            if (!res.ok) {
-                const responseBodyText = await res.text();
-                const json = parseJson(responseBodyText, {});
-                const message = json.message ?? responseBodyText;
-                const error = new Error(message) as any;
-                error.name = json.name ?? 'UnknownError';
-                error.details = json.details;
-                error.code = res.status;
-                throw error;
+        const res = await fetch(url.toString(), {
+            method,
+            headers,
+            mode: 'cors',
+            credentials: 'include',
+            body: method === 'POST' ? JSON.stringify(params ?? {}) : undefined,
+        }).catch(err => {
+            throw new RequestFailedError(err, url.toString());
+        });
+
+        if (!res.ok) {
+            const responseBodyText = await res.text();
+            let responseError;
+            try {
+                const json = JSON.parse(responseBodyText);
+                responseError = new Error(json.message) as any;
+                responseError.name = json.name;
+                responseError.details = json.details;
+            } catch {
+                throw new HttpRequestError(res, responseBodyText);
             }
-            return await res.json();
-        } catch (error: any) {
-            throw new RequestError(error, url.toString());
+            throw responseError;
         }
+
+        return await res.json().catch(err => {
+            throw new UnexpectedResponseError(err);
+        });
     };
-}
-
-class RequestError extends Error {
-    cause: any;
-    code?: number;
-
-    constructor(err: any, url: string) {
-        super(`Request to ${url} failed: ${err.message}`);
-        this.name = 'RequestError';
-        this.code = err.code ?? undefined;
-        this.cause = {
-            name: err?.name ?? 'UnknownError',
-            message: err?.message ?? String(err),
-            details: err?.details ?? 'The target server failed to process the request.'
-        };
-    }
 }
